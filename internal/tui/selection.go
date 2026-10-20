@@ -141,7 +141,7 @@ func (m *Model) bulkComplete(sel []*todoist.Task) tea.Cmd {
 	if len(once) == 0 {
 		done = fmt.Sprintf("Completed %d occurrence(s)", len(ids))
 	}
-	return m.simpleWrite(done, func(ctx context.Context) error {
+	write := m.simpleWrite(done, func(ctx context.Context) error {
 		for _, id := range ids {
 			if err := client.Close(ctx, id); err != nil {
 				return err
@@ -149,6 +149,7 @@ func (m *Model) bulkComplete(sel []*todoist.Task) tea.Cmd {
 		}
 		return nil
 	})
+	return tea.Batch(write, m.celebrate(len(ids)))
 }
 
 // bulkPriority sets one priority on the selected tasks.

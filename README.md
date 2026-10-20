@@ -140,7 +140,7 @@ godoist writes these files:
 
 | File | Content |
 |---|---|
-| `~/.config/godoist/config.toml` | The API token (after `godoist login`), the theme that you keep in the theme picker, and the width of the task list. |
+| `~/.config/godoist/config.toml` | The API token (after `godoist login`), the theme that you keep in the theme picker, and the width of the task list. Add `no_fireworks = true` to turn off the fireworks after a completion. |
 | `~/.cache/godoist/sync.json` | The local copy of your account (owner-only permissions). |
 | `~/.cache/godoist/queue-*.json` | The task changes that wait for the network (owner-only permissions). |
 | `~/.local/state/godoist/state.toml` | The expanded tasks of each overview. |
@@ -163,7 +163,7 @@ Push `?` to see all keys. The first bottom line shows the keys for the pane that
 | `j` / `k`, `g` / `G` | Move down or up, go to the top or the bottom. In the sidebar, `pgup` / `pgdown` also go to the top or the bottom. |
 | `enter` | Open the project, or open the details. |
 | `a` | Add a task. The dialog has a name, which Todoist parses, and a description. |
-| `x` or `space` | Complete the task. `ctrl+z` undoes the last completion of a one-time task. |
+| `x` or `space` | Complete the task, with fireworks. `ctrl+z` undoes the last completion of a one-time task. |
 | `e` | Edit the name and the description. `#project`, `/section`, `@label`, and `p1`–`p4` in the name change only those fields. Dates in the name are not read: use `t`. |
 | `E` | Edit the description in the [markdown editor](#markdown-editor). |
 | `t` | Open the date dialog. |

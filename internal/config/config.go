@@ -17,6 +17,8 @@ type Config struct {
 	// ListShare is the share of the task list in the space next to the details pane
 	// ({ and } in the TUI). 0 gives half.
 	ListShare float64 `toml:"list_share,omitempty"`
+	// NoFireworks turns off the fireworks after a completion.
+	NoFireworks bool `toml:"no_fireworks,omitempty"`
 }
 
 // Path returns the config file location (~/.config/godoist/config.toml).

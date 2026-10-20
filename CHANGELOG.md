@@ -7,6 +7,10 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Added
+
+- Fireworks after you complete a task: a volley of rockets, and more for a bulk completion. Set `no_fireworks = true` in `~/.config/godoist/config.toml` to turn them off.
+
 ## [0.9.0] - 2026-10-20
 
 ### Added

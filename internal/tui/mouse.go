@@ -631,6 +631,9 @@ func (m Model) overlays(screen string) string {
 			Render(" ⇢ " + trunc(m.drag.content, 30) + " ")
 		layers = append(layers, lipgloss.NewLayer(label).X(min(m.drag.x+2, max(0, m.width-lipgloss.Width(label)))).Y(m.drag.y).Z(3))
 	}
+	if m.fw != nil {
+		layers = append(layers, m.fw.layers(m.width, m.height)...)
+	}
 	if len(layers) == 1 {
 		return screen
 	}

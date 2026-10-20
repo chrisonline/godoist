@@ -215,6 +215,10 @@ type Model struct {
 	offline    bool                    // the last sync could not reach Todoist
 	pendingIDs map[string]bool         // tasks with a queued change that only Todoist can finish (⏳)
 
+	fw          *fireworks // the show after a completion, or nil
+	fwGen       int        // counts the shows
+	noFireworks bool       // the config turns the show off
+
 	md *mdCache
 }
 
@@ -223,6 +227,7 @@ type Model struct {
 type Settings struct {
 	Theme         string  // the color theme (see ThemeNames)
 	ListShare     float64 // the share of the task list next to the details pane, 0 for half
+	NoFireworks   bool    // no fireworks after a completion
 	SaveTheme     func(name string) error
 	SaveListShare func(share float64) error
 }
@@ -232,7 +237,8 @@ func New(client *todoist.Client, token string, set Settings) Model {
 	ti := newTextInput()
 	ti.CharLimit = 500
 	m := Model{client: client, token: token, input: &ti, comCur: -1, chkCur: -1, md: newMDCache(),
-		termDark: true, saveTheme: set.SaveTheme, listShare: set.ListShare, saveShare: set.SaveListShare}
+		termDark: true, saveTheme: set.SaveTheme, listShare: set.ListShare, saveShare: set.SaveListShare,
+		noFireworks: set.NoFireworks}
 	applyTheme(set.Theme, true)
 	m.ui, _ = state.Load()
 	m.syncing = 1 // Init starts the first sync
@@ -379,6 +385,8 @@ func (m Model) update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m.themeSaved(msg)
 	case shareSaveMsg:
 		return m.shareSave(msg)
+	case fireworksMsg:
+		return m.fireworksFrame(msg)
 	case shareSavedMsg:
 		if msg.err != nil {
 			m.setStatus("the pane width was not saved: "+msg.err.Error(), true)
@@ -1416,7 +1424,8 @@ func (m *Model) complete() tea.Cmd {
 	}
 	m.setStatus(text, false)
 	client := m.client
-	return m.simpleWrite(text, func(ctx context.Context) error { return client.Close(ctx, id) })
+	write := m.simpleWrite(text, func(ctx context.Context) error { return client.Close(ctx, id) })
+	return tea.Batch(write, m.celebrate(1))
 }
 
 func (m Model) undo() (tea.Model, tea.Cmd) {
